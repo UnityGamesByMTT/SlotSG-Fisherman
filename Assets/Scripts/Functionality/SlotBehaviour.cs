@@ -239,7 +239,7 @@ public class SlotBehaviour : MonoBehaviour
 
         for (int i = 1; i <= linecounter; i++)
         {
-            Debug.Log("run this code");
+            Debug.Log("run this code"+ linecounter);
             Lines_text.text = i.ToString();
             StaticLine_Buttons[i - 1].interactable = true;
             StaticLine_Buttons[i + 11].interactable = true;

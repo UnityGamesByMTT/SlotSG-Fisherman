@@ -14,8 +14,8 @@ public class ManageLineButtons : MonoBehaviour, IPointerEnterHandler,IPointerExi
 	private TMP_Text num;
 
 	internal bool isActive = false;
-	[SerializeField]
-	private int number;
+	//[SerializeField]
+	//private int number;
 
 
 
