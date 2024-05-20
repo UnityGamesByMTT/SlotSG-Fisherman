@@ -2716,8 +2716,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotManager: {fileID: 2046803210}
-  myJsonFile: {fileID: 4900000, guid: 90908d08c2c7d4bc09e4cb8040e2d6dd, type: 3}
-  ResultJsonFile: {fileID: 4900000, guid: c2929104e256c4777b57cec902093bfd, type: 3}
 --- !u!1 &509991482
 GameObject:
   m_ObjectHideFlags: 0
@@ -4909,7 +4907,6 @@ MonoBehaviour:
   LineContainer: {fileID: 21776335}
   Line_Prefab: {fileID: 1141521666132180400, guid: 95e0640a1aceb43ce952186ee810e809, type: 3}
   InitialLinePosition: {x: -413, y: 204}
-  slotManager: {fileID: 2046803210}
 --- !u!4 &963807278
 Transform:
   m_ObjectHideFlags: 0
@@ -6399,7 +6396,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -11792,6 +11789,7 @@ MonoBehaviour:
   TotalBet_text: {fileID: 69738317}
   Lines_text: {fileID: 707535442}
   TotalWin_text: {fileID: 576684260}
+  MaxBet_Button: {fileID: 1237956803}
   BetPlus_Button: {fileID: 1550566148}
   BetMinus_Button: {fileID: 685179760}
   LinePlus_Button: {fileID: 308316142}
@@ -11809,6 +11807,7 @@ MonoBehaviour:
   IconSizeFactor: 194
   verticalVisibility: 3
   SocketManager: {fileID: 500036492}
+  Exit_Button: {fileID: 1761242071}
 --- !u!1 &2080636219
 GameObject:
   m_ObjectHideFlags: 0
