@@ -21,8 +21,6 @@ public class SocketIOManager : MonoBehaviour
     internal UIData initUIData = null;
     internal GameData resultData = null;
     internal PlayerData playerdata = null;
-    //[SerializeField]
-    //internal List<string> bonusdata = null;
     WebSocket currentSocket = null;
     internal bool isResultdone = false;
 
@@ -97,7 +95,6 @@ public class SocketIOManager : MonoBehaviour
                     initialData = myData.message.GameData;
                     initUIData = myData.message.UIData;
                     playerdata = myData.message.PlayerData;
-//            
                     List<string> LinesString = ConvertListListIntToListString(initialData.Lines);
                     List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
                     InitialReels = RemoveQuotes(InitialReels);
