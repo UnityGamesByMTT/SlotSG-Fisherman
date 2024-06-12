@@ -71,15 +71,16 @@ MonoBehaviour:
   _playPongButtonFontSize: 13px
   _watchVideoButtonYoutubeLink: https://www.youtube.com/watch?v=FIpZ1h7LEos
   _disableMobileWarning: 1
-  _targetPath: /Users/underpinmacgamedev/Desktop/SlotsWebgl/GoldenChinaTown/Gslots
+  _targetPath: /Users/gamedev2/Desktop/Unity/Build/Slot-Fisherman
   _s11: "\n    &&& title2019start &&&<title>%UNITY_WEB_NAME%</title>&&& title2019end
-    &&&\n    &&& title2020start &&&<title>SlotsUP</title>&&& title2020end &&&\n   
-    &&& UnityLoader1 &&& <script src=\"%UNITY_WEBGL_LOADER_URL%\"></script> &&& UnityLoader2
-    &&&\n    "
+    &&&\n    &&& title2020start &&&<title>Slot Fisherman</title>&&& title2020end
+    &&&\n    &&& UnityLoader1 &&& <script src=\"%UNITY_WEBGL_LOADER_URL%\"></script>
+    &&& UnityLoader2 &&&\n    "
   _s21: "\n            applicationInstance = UnityLoader.instantiate(\"gameContainer\",
     \"%UNITY_WEBGL_BUILD_URL%\", {onProgress: UnityProgress});\n            "
-  _s31: "\n    var buildUrl = \"Build\";\n    var loaderUrl = buildUrl + \"/Gslots.loader.js\";\n   
-    var config = {\n        dataUrl: buildUrl + \"/Gslots.data\",\n        frameworkUrl:
-    buildUrl + \"/Gslots.framework.js\",\n        codeUrl: buildUrl + \"/Gslots.wasm\",\n       
-    streamingAssetsUrl: \"StreamingAssets\",\n        companyName: \"UnderpinServices\",\n       
-    productName: \"SlotsUP\",\n        productVersion: \"1.0\",\n    };\n"
+  _s31: "\n    var buildUrl = \"Build\";\n    var loaderUrl = buildUrl + \"/Slot-Fisherman.loader.js\";\n   
+    var config = {\n        dataUrl: buildUrl + \"/Slot-Fisherman.data.unityweb\",\n       
+    frameworkUrl: buildUrl + \"/Slot-Fisherman.framework.js.unityweb\",\n       
+    codeUrl: buildUrl + \"/Slot-Fisherman.wasm.unityweb\",\n        streamingAssetsUrl:
+    \"StreamingAssets\",\n        companyName: \"DefaultCompany\",\n        productName:
+    \"Slot Fisherman\",\n        productVersion: \"0.1\",\n    };\n"
