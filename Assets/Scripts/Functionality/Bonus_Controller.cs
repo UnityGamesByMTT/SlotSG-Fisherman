@@ -39,15 +39,15 @@ public class Bonus_Controller : MonoBehaviour
             chest[i].onClick.AddListener(delegate { OnChestOpen(index); });
         }
 
-        StartBonusGame(Fakeresult);
+        // StartBonusGame(Fakeresult);
     }
 
-    internal void StartBonusGame(List<string> result)
+    internal void StartBonusGame(List<int> result)
     {
 
         for (int i = 0; i < result.Count; i++)
         {
-            resultData.Add(int.Parse(result[i]));
+            resultData.Add(result[i]);
         }
 
         // audioController.StopBgAudio();
@@ -103,10 +103,10 @@ public class Bonus_Controller : MonoBehaviour
         if (resultData[openCount] > 0)
         {
             // audioController.PlayWLAudio("bonuswin");
-            // reward_text[index].text = "+ " + (resultData[openCount] * slotBehaviour.GetCurrentbetperLine()).ToString("f2");
-            // winAmount += (resultData[openCount] * slotBehaviour.GetCurrentbetperLine());
-            reward_text[index].text = "+ " + (resultData[openCount] * 1).ToString("f2");
-            winAmount += (resultData[openCount] * 1);
+            reward_text[index].text = "+ " + (resultData[openCount] * slotBehaviour.GetCurrentbetperLine()).ToString("f2");
+            winAmount += (resultData[openCount] * slotBehaviour.GetCurrentbetperLine());
+            // reward_text[index].text = "+ " + (resultData[openCount] * 1).ToString("f2");
+            // winAmount += (resultData[openCount] * 1);
         }
         else
         {

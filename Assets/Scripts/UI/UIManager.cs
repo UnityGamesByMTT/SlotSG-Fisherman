@@ -1,13 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
-using System.Linq;
 using TMPro;
-using System;
-using UnityEngine.EventSystems;
-using UnityEngine.Networking;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -15,10 +11,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Popus UI")]
     [SerializeField] private GameObject MainPopup_Object;
-    [SerializeField] private Button Paytable_button;
     
 
     [Header("Paytable Popup")]
+    [SerializeField] private Button Paytable_button;
     [SerializeField] private GameObject PaytablePopup_Object;
     [SerializeField] private Button PaytableExit_Button;
     [SerializeField] private Button Left_Arrow;
@@ -33,13 +29,12 @@ public class UIManager : MonoBehaviour
 
     [Header("Win Popup")]
     [SerializeField] private GameObject WinPopup_Object;
-    [SerializeField] private GameObject jackpot_Object;
     [SerializeField] private Image Win_Image;
     [SerializeField] private Sprite BigWin_Sprite;
     [SerializeField] private Sprite HugeWin_Sprite;
     [SerializeField] private Sprite MegaWin_Sprite;
+    [SerializeField] private Sprite Jackpot_Sprite;
     [SerializeField] private TMP_Text Win_Text;
-    [SerializeField] private TMP_Text jackpot_Text;
 
 
     [Header("Menu popup")]
@@ -63,9 +58,6 @@ public class UIManager : MonoBehaviour
     [Header("Splash Screen")]
     [SerializeField] private GameObject spalsh_screen;
     [SerializeField] private Image progressbar;
-    [SerializeField] private TMP_Text progressbar_text;
-    [SerializeField] private TMP_Text loadingText;
-
 
     [Header("Scripts")]
     [SerializeField] private AudioController audioController;
@@ -100,8 +92,9 @@ public class UIManager : MonoBehaviour
     private bool isMusic = true;
     private bool isSound = true;
 
-    //TODO: slot add splash screen
-    //TODO: slot populate all symbol text
+    //COMPLETED: slot add splash screen
+
+    //COMPLETED: slot populate all symbol text
     //TODO: slot set disconnection
     //TODO: slot set audio control
 
@@ -122,10 +115,10 @@ public class UIManager : MonoBehaviour
         if (Paytable_button) Paytable_button.onClick.AddListener(delegate { OpenPopup(PaytablePopup_Object); });
 
         if (Left_Arrow) Left_Arrow.onClick.RemoveAllListeners();
-        if (Left_Arrow) Left_Arrow.onClick.AddListener(delegate { slide(-1); });
+        if (Left_Arrow) Left_Arrow.onClick.AddListener(delegate { Slide(-1); });
 
         if (Right_Arrow) Right_Arrow.onClick.RemoveAllListeners();
-        if (Right_Arrow) Right_Arrow.onClick.AddListener(delegate { slide(1); });
+        if (Right_Arrow) Right_Arrow.onClick.AddListener(delegate { Slide(1); });
 
         if (GameExit_Button) GameExit_Button.onClick.RemoveAllListeners();
         if (GameExit_Button) GameExit_Button.onClick.AddListener(delegate { OpenPopup(QuitPopupObject); });
@@ -171,13 +164,13 @@ public class UIManager : MonoBehaviour
 
 
 
-//TODO: slot add socket
+//COMPLETED: slot add socket in loading splash screen
     private IEnumerator LoadingRoutine()
     {
         float fillAmount = 0.7f;
         progressbar.DOFillAmount(fillAmount, 3f).SetEase(Ease.Linear);
         yield return new WaitForSecondsRealtime(3f);
-        // yield return new WaitUntil(() => !socketManager.isLoading);
+        yield return new WaitUntil(() => !socketManager.isLoading);
         progressbar.DOFillAmount(1, 1f).SetEase(Ease.Linear);
         yield return new WaitForSecondsRealtime(1f);
         if (spalsh_screen) spalsh_screen.SetActive(false);
@@ -199,12 +192,12 @@ public class UIManager : MonoBehaviour
             case 3:
                 if (Win_Image) Win_Image.sprite = MegaWin_Sprite;
                 break;
+            case 4:
+                if (Win_Image) Win_Image.sprite = Jackpot_Sprite;
+                break;
 
         }
-        if (value == 4)
-            StartPopupAnim(amount, true);
-        else
-            StartPopupAnim(amount, false);
+        StartPopupAnim(amount, false);
 
     }
 
@@ -212,48 +205,24 @@ public class UIManager : MonoBehaviour
     private void StartPopupAnim(double amount, bool jackpot = false)
     {
         int initAmount = 0;
-        if (jackpot)
-        {
-            if (jackpot_Object) jackpot_Object.SetActive(true);
-        }
-        else
-        {
-            if (WinPopup_Object) WinPopup_Object.SetActive(true);
 
-        }
-
+        if (WinPopup_Object) WinPopup_Object.SetActive(true);
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
 
         DOTween.To(() => initAmount, (val) => initAmount = val, (int)amount, 5f).OnUpdate(() =>
         {
-            if (jackpot)
-            {
-                if (jackpot_Text) jackpot_Text.text = initAmount.ToString();
-            }
-            else
-            {
 
-                if (Win_Text) Win_Text.text = initAmount.ToString();
-            }
+            if (Win_Text) Win_Text.text = initAmount.ToString();
+            
         });
 
         DOVirtual.DelayedCall(6f, () =>
         {
-            if (jackpot)
-            {
 
-                ClosePopup(jackpot_Object);
-                jackpot_Text.text="";
+            ClosePopup(WinPopup_Object);
+            Win_Text.text="";
 
-            }
-            else
-            {
-                ClosePopup(WinPopup_Object);
-                Win_Text.text="";
-
-            }
-
-            // slotManager.CheckPopups = false;
+            slotManager.CheckPopups = false;
         });
     }
 
@@ -261,7 +230,6 @@ public class UIManager : MonoBehaviour
     {
         if (audioController) audioController.PlayButtonAudio();
         if (Popup) Popup.SetActive(true);
-
 
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
     }
@@ -287,7 +255,7 @@ public class UIManager : MonoBehaviour
         OpenPopup(ADPopup_Object);
     }
 
-    private void slide(int i)
+    private void Slide(int i)
     {
         if (audioController) audioController.PlayButtonAudio();
 
@@ -342,25 +310,6 @@ public class UIManager : MonoBehaviour
 
     }
 
-    internal void updateFreeSPinData(float fillAmount, int count)
-    {
-        print("triggered freespin");
-        if (fillAmount < 0)
-            fillAmount = 0;
-        if (fillAmount > 1)
-            fillAmount = 1;
-
-        freeSpinBar.DOFillAmount(fillAmount, 0.5f).SetEase(Ease.Linear);
-        freeSpinCount.text = count.ToString();
-    }
-
-
-    internal void setFreeSpinData(int count)
-    {
-        freeSpinBar.DOFillAmount(1, 0.2f).SetEase(Ease.Linear);
-        freeSpinCount.text = count.ToString();
-    }
-
     internal void InitialiseUIData(string SupportUrl, string AbtImgUrl, string TermsUrl, string PrivacyUrl, Paylines symbolsText)
     {
         PopulateSymbolsPayout(symbolsText);
@@ -373,15 +322,15 @@ public class UIManager : MonoBehaviour
             string text = null;
             if (paylines.symbols[i].Multiplier[0][0] != 0)
             {
-                text += paylines.symbols[i].Multiplier[0][0];
-            }
+                text += $"5x- {paylines.symbols[i].Multiplier[0][0]}";
+            } 
             if (paylines.symbols[i].Multiplier[1][0] != 0)
             {
-                text += "\n" + paylines.symbols[i].Multiplier[1][0];
+                text += $"\n3x- {paylines.symbols[i].Multiplier[1][0]}";
             }
             if (paylines.symbols[i].Multiplier[2][0] != 0)
             {
-                text += "\n" + paylines.symbols[i].Multiplier[2][0];
+                text += $"\n2x- {paylines.symbols[i].Multiplier[2][0]}";
             }
             if (SymbolsText[i]) SymbolsText[i].text = text;
         }
@@ -448,7 +397,6 @@ public class UIManager : MonoBehaviour
             audioController.ToggleMute(true, "bg");
         }
     }
-
 
 
     private void ToggleSound()

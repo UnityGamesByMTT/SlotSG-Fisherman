@@ -35,13 +35,11 @@ public class SocketIOManager : MonoBehaviour
     //private string SocketURI;
 
     protected string SocketURI = null;
-    protected string TestSocketURI = "https://dev.casinoparadize.com";
-
+    // protected string TestSocketURI = "https://dev.casinoparadize.com";
+    protected string TestSocketURI = "http://localhost:5000";
     [SerializeField] private string TestToken;
-    protected string gameID = "SL-FISH";
-
+    protected string gameID = ""; //SL-FISH
     internal bool isLoading;
-
     internal bool SetInit = false;
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
@@ -55,8 +53,8 @@ public class SocketIOManager : MonoBehaviour
 
     private void Start()
     {
-        // OpenSocket();
-        slotManager.shuffleInitialMatrix();
+        OpenSocket();
+        // slotManager.shuffleInitialMatrix();
     }
 
     void ReceiveAuthToken(string jsonData)
@@ -164,7 +162,6 @@ public class SocketIOManager : MonoBehaviour
 #else
         this.manager = new SocketManager(new Uri(SocketURI), options);
 #endif
-
         // Set subscriptions
         this.manager.Socket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
         this.manager.Socket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
@@ -283,9 +280,10 @@ public class SocketIOManager : MonoBehaviour
                     if (!SetInit)
                     {
                         Debug.Log(jsonObject);
+                        List<string> LinesString = ConvertListListIntToListString(initialData.Lines);
                         List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
                         InitialReels = RemoveQuotes(InitialReels);
-                        PopulateSlotSocket(InitialReels);
+                        PopulateSlotSocket(InitialReels,LinesString);
                         SetInit = true;
                     }
                     else
@@ -312,9 +310,13 @@ public class SocketIOManager : MonoBehaviour
         uIManager.InitialiseUIData(initUIData.AbtLogo.link, initUIData.AbtLogo.logoSprite, initUIData.ToULink, initUIData.PopLink, initUIData.paylines);
     }
 
-    private void PopulateSlotSocket(List<string> slotPop)
+    private void PopulateSlotSocket(List<string> slotPop,List<string> LineIds)
     {
         slotManager.shuffleInitialMatrix();
+        for (int i = 0; i < LineIds.Count; i++)
+        {
+            slotManager.FetchLines(LineIds[i], i);
+        }
         // for (int i = 0; i < 5; i++)
         // {
         //    List<int> points = slotPop[i]?.Split(',')?.Select(Int32.Parse)?.ToList();
@@ -338,7 +340,7 @@ public class SocketIOManager : MonoBehaviour
         message.data = new BetData();
         message.data.currentBet = currBet;
         message.data.spins = 1;
-        message.data.currentLines = 9;
+        message.data.currentLines = initialData.Lines.Count;
         message.id = "SPIN";
         // Serialize message data to JSON
         string json = JsonUtility.ToJson(message);
@@ -473,7 +475,7 @@ public class AbtLogo
 public class GameData
 {
     public List<List<string>> Reel { get; set; }
-    public List<List<double>> Lines { get; set; }
+    public List<List<int>> Lines { get; set; }
     public List<double> Bets { get; set; }
     public bool canSwitchLines { get; set; }
     public List<int> LinesCount { get; set; }
@@ -587,6 +589,7 @@ public class PlayerData
     public double currentWining { get; set; }
 
 }
+
 
 [Serializable]
 public class AuthTokenData
