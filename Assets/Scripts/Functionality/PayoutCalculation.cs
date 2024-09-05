@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
@@ -23,6 +24,8 @@ public class PayoutCalculation : MonoBehaviour
     //generate lines at runtime accordingly
     internal void GeneratePayoutLinesBackend(List<int> y_index, int Count, bool isStatic = false)
     {
+
+        Debug.Log("line data + "+JsonConvert.SerializeObject(y_index));
         GameObject MyLineObj = Instantiate(Line_Prefab, LineContainer);
         MyLineObj.transform.localPosition = new Vector2(InitialLinePosition.x, InitialLinePosition.y);
         UILineRenderer MyLine = MyLineObj.GetComponent<UILineRenderer>();
@@ -37,7 +40,7 @@ public class PayoutCalculation : MonoBehaviour
         newpointlist.RemoveAt(0);
         MyLine.Points = newpointlist.ToArray();
 
-        if (isStatic)
+        if(isStatic)
         {
             TempObj = MyLineObj;
         }
