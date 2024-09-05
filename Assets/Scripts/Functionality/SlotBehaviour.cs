@@ -32,20 +32,12 @@ public class SlotBehaviour : MonoBehaviour
     [SerializeField]
     private Transform[] Slot_Transform;
 
-    [Header("Line Button Objects")]
-    [SerializeField]
-    private List<GameObject> StaticLine_Objects;
-    [Header("Line Button Objects")]
+    [Header("Line Button")]
     [SerializeField]
     private List<Button> StaticLine_Buttons;
     [Header("Line Button Objects")]
     [SerializeField]
     private List<ManageLineButtons> StaticLine_Scripts;
-
-    [Header("Line Button Texts")]
-    [SerializeField]
-    private List<TMP_Text> StaticLine_Texts;
-
 
     private Dictionary<int, string> y_string = new Dictionary<int, string>();
 
@@ -128,6 +120,14 @@ public class SlotBehaviour : MonoBehaviour
         if (BetMinus_Button) BetMinus_Button.onClick.RemoveAllListeners();
         if (BetMinus_Button) BetMinus_Button.onClick.AddListener(delegate { ChangeBet(false); });
 
+        if (AutoSpin_Button) AutoSpin_Button.onClick.RemoveAllListeners();
+        if (AutoSpin_Button) AutoSpin_Button.onClick.AddListener(AutoSpin);
+
+
+        if (AutoSpinStop_Button) AutoSpinStop_Button.onClick.RemoveAllListeners();
+        if (AutoSpinStop_Button) AutoSpinStop_Button.onClick.AddListener(StopAutoSpin);
+
+
         if (Lines_text != null)
         {
             Lines_text.text = "12";
@@ -203,8 +203,7 @@ public class SlotBehaviour : MonoBehaviour
     internal void FetchLines(string LineVal, int count)
     {
         y_string.Add(count + 1, LineVal);
-        StaticLine_Texts[count].text = (count + 1).ToString();
-        StaticLine_Objects[count].SetActive(true);
+        // StaticLine_Objects[count].SetActive(true);
     }
 
     //Generate Static Lines from button hovers
@@ -222,6 +221,7 @@ public class SlotBehaviour : MonoBehaviour
         }
         List<int> y_points = null;
         y_points = y_string[LineID]?.Split(',')?.Select(Int32.Parse)?.ToList();
+        print("line id "+LineID);
         PayCalculator.GeneratePayoutLinesBackend(y_points, y_points.Count, true);
 
     }
@@ -236,9 +236,10 @@ public class SlotBehaviour : MonoBehaviour
 
     private void MaxBet()
     {
-        // if (audioController) audioController.PlayButtonAudio();
+        if (audioController) audioController.PlayButtonAudio();
         BetCounter = SocketManager.initialData.Bets.Count - 1;
-        if (TotalBet_text) TotalBet_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
+        if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] *SocketManager.initialData.Lines.Count).ToString();
+        if(BetPerLine_text) BetPerLine_text.text=SocketManager.initialData.Bets[BetCounter].ToString();
     }
 
 
@@ -263,7 +264,7 @@ public class SlotBehaviour : MonoBehaviour
 
     private void ChangeBet(bool IncDec)
     {
-        // if (audioController) audioController.PlayButtonAudio();
+        if (audioController) audioController.PlayButtonAudio();
         if (IncDec)
         {
             if (BetCounter < SocketManager.initialData.Bets.Count - 1)
@@ -350,7 +351,7 @@ public class SlotBehaviour : MonoBehaviour
         LineCounter = SocketManager.initialData.LinesCount.Count - 1;
         currentBalance = SocketManager.playerdata.Balance;
         currentTotalBet = SocketManager.initialData.Bets[BetCounter] * SocketManager.initialData.Lines.Count;
-        if (TotalBet_text) TotalBet_text.text = currentTotalBet.ToString("f2");
+        if (TotalBet_text) TotalBet_text.text = currentTotalBet.ToString();
         Debug.Log("my bets is " + SocketManager.initialData.Bets[BetCounter]);
         if (Lines_text) Lines_text.text = SocketManager.initialData.LinesCount[LineCounter].ToString("f2");
         if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f2");
@@ -381,9 +382,8 @@ public class SlotBehaviour : MonoBehaviour
     //starts the spin process
     private void StartSlots(bool autoSpin=false)
     {
-        // if (audioController) audioController.PlayWLAudio("spin");
 
-        // if (audioController) audioController.PlaySpinButtonAudio();
+        if (audioController) audioController.PlayButtonAudio("spin");
 
         if (!autoSpin)
         {
@@ -409,7 +409,7 @@ public class SlotBehaviour : MonoBehaviour
     }
 
 
-    //TODO: slot compare balance
+    //COMPLETED: slot compare balance
     private IEnumerator TweenRoutine()
     {
         IsSpinning = true;
@@ -428,6 +428,8 @@ public class SlotBehaviour : MonoBehaviour
             yield break;
         }
         ToggleButtonGrp(false);
+        if(audioController)audioController.PlaySpinBonusAudio();
+
         for (int i = 0; i < numberOfSlots; i++)
         {
             InitializeTweening(Slot_Transform[i]);
@@ -467,7 +469,7 @@ public class SlotBehaviour : MonoBehaviour
 
         yield return new WaitUntil(() => SocketManager.isResultdone);
 
-        // if (audioController) audioController.PlayWLAudio("spinStop");
+
 
         //COMPLETED: slot populate result data
 
@@ -487,9 +489,11 @@ public class SlotBehaviour : MonoBehaviour
             yield return StopTweening(Slot_Transform[i], i);
         }
 
+        if (audioController) audioController.StopApinBonusAudio();
         yield return new WaitForSeconds(0.5f);
-        if (audioController) audioController.StopWLAaudio();
-        //COMPLETED: slot chek result and payline
+
+        // if (audioController) audioController.StopWLAaudio();
+        //COMPLETED: slot chek result and payline and animation
 
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit);
         KillAllTweens();
@@ -605,18 +609,16 @@ public class SlotBehaviour : MonoBehaviour
         if (LineMinus_Button) LineMinus_Button.interactable = toggle;
         if (BetMinus_Button) BetMinus_Button.interactable = toggle;
         if (BetPlus_Button) BetPlus_Button.interactable = toggle;
+        if(AutoSpin_Button) AutoSpin_Button.interactable=toggle;
 
     }
     //start the icons animation
     private void StartGameAnimation(GameObject animObjects)
     {
-
         ImageAnimation temp = animObjects.transform.GetChild(0).GetComponent<ImageAnimation>();
         animObjects.transform.GetChild(0).gameObject.SetActive(true);
         temp.StartAnimation();
         TempList.Add(temp);
-
-
     }
 
     //stop the icons animation
@@ -634,7 +636,7 @@ public class SlotBehaviour : MonoBehaviour
         List<int> points_anim = null;
         if (LineId.Count > 0 || points_AnimString.Count > 0)
         {
-            // if (audioController) audioController.PlayWLAudio("win");
+            if (audioController) audioController.PlayWLAudio("win");
 
             for (int i = 0; i < LineId.Count; i++)
             {
@@ -649,7 +651,6 @@ public class SlotBehaviour : MonoBehaviour
 
                 for (int k = 0; k < points_anim.Count; k++)
                 {
-                    Debug.Log("points :," + points_anim[k] + "count");
                     if (points_anim[k] >= 10)
                     {
                         StartGameAnimation(slotmatrix[(points_anim[k] / 10) % 10].slotImages[points_anim[k] % 10].gameObject);

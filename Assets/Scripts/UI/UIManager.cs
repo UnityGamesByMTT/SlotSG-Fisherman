@@ -48,10 +48,10 @@ public class UIManager : MonoBehaviour
     [Header("Settings popup")]
     [SerializeField] private Button Setting_button;
     [SerializeField] private GameObject settingObject;
-    [SerializeField] private Button Sound_Button;
-    [SerializeField] private Button Music_Button;
-    [SerializeField] private Sprite OnSprite;
-    [SerializeField] private Sprite OffSprite;
+    [SerializeField] private Button SoundON_Button;
+    [SerializeField] private Button SoundOff_Button;
+    [SerializeField] private Button MusicON_Button;
+    [SerializeField] private Button MusicOff_Button;
     [SerializeField] private Button Setting_exit_button;
 
 
@@ -95,8 +95,10 @@ public class UIManager : MonoBehaviour
     //COMPLETED: slot add splash screen
 
     //COMPLETED: slot populate all symbol text
-    //TODO: slot set disconnection
-    //TODO: slot set audio control
+
+    //COMPLETED: slot set disconnection
+
+    //COMPLETED: slot set audio control
 
     private void Awake()
     {
@@ -146,17 +148,23 @@ public class UIManager : MonoBehaviour
         if (Setting_exit_button) Setting_exit_button.onClick.RemoveAllListeners();
         if (Setting_exit_button) Setting_exit_button.onClick.AddListener(delegate { ClosePopup(settingObject); });
 
-        if (Sound_Button) Sound_Button.onClick.RemoveAllListeners();
-        if (Sound_Button) Sound_Button.onClick.AddListener(ToggleSound);
+        if (SoundON_Button) SoundON_Button.onClick.RemoveAllListeners();
+        if (SoundON_Button) SoundON_Button.onClick.AddListener(delegate{ToggleSound(true);});
 
-        if (Music_Button) Music_Button.onClick.RemoveAllListeners();
-        if (Music_Button) Music_Button.onClick.AddListener(ToggleMusic);
+        if (SoundOff_Button) SoundOff_Button.onClick.RemoveAllListeners();
+        if (SoundOff_Button) SoundOff_Button.onClick.AddListener(delegate{ToggleSound(false);});
+
+        if (MusicON_Button) MusicON_Button.onClick.RemoveAllListeners();
+        if (MusicON_Button) MusicON_Button.onClick.AddListener(delegate{ToggleMusic(true);});
+
+        if (MusicOff_Button) MusicOff_Button.onClick.RemoveAllListeners();
+        if (MusicOff_Button) MusicOff_Button.onClick.AddListener(delegate{ToggleMusic(false);});
 
         if (CloseAD_Button) CloseAD_Button.onClick.RemoveAllListeners();
         if (CloseAD_Button) CloseAD_Button.onClick.AddListener(CallOnExitFunction);
 
-        isMusic = true;
-        isSound = true;
+        ToggleMusic(true);
+        ToggleMusic(true);
 
 
 
@@ -230,7 +238,6 @@ public class UIManager : MonoBehaviour
     {
         if (audioController) audioController.PlayButtonAudio();
         if (Popup) Popup.SetActive(true);
-
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
     }
 
@@ -287,7 +294,7 @@ public class UIManager : MonoBehaviour
     void OnMenuClick()
     {
         isOpen = !isOpen;
-        // if (audioController) audioController.PlayButtonAudio();
+        if(audioController) audioController.PlayButtonAudio();
 
         if (isOpen)
         {
@@ -362,7 +369,7 @@ public class UIManager : MonoBehaviour
 
     internal void DisconnectionPopup()
     {
-
+        Debug.Log("entered disconnection popup");
         //ClosePopup(ReconnectPopup_Object);
         if (!isExit)
         {
@@ -378,36 +385,36 @@ public class UIManager : MonoBehaviour
         Application.ExternalCall("window.parent.postMessage", "onExit", "*");
     }
 
-    private void ToggleMusic()
+    private void ToggleMusic(bool isMusic)
     {
-        //[SerializeField] private Sprite SoundOnSprite;
-        //[SerializeField] private Sprite SoundOffSprite;
-        //[SerializeField] private Sprite MusicOnSprite;
-        //[SerializeField] private Sprite MusicOffSprite;
-        isMusic = !isMusic;
+        // isMusic = !isMusic;
         if (isMusic)
         {
-            if (Music_Button) Music_Button.image.sprite = OnSprite;
+            if (MusicON_Button) MusicON_Button.interactable=false;
+            if (MusicOff_Button) MusicOff_Button.interactable=true;
             audioController.ToggleMute(false, "bg");
         }
         else
         {
-            if (Music_Button) Music_Button.image.sprite = OffSprite;
+            if (MusicON_Button) MusicON_Button.interactable=true;
+            if (MusicOff_Button) MusicOff_Button.interactable=false;
 
             audioController.ToggleMute(true, "bg");
         }
     }
 
 
-    private void ToggleSound()
+    private void ToggleSound(bool isSound)
     {
-        isSound = !isSound;
+        // isSound = !isSound;
+
         if (isSound)
         {
             //if (SoundOn_Object) SoundOn_Object.SetActive(true);
             //if (SoundOff_Object) SoundOff_Object.SetActive(false);
 
-            if (Sound_Button) Sound_Button.image.sprite = OnSprite;
+            if (SoundON_Button) SoundON_Button.interactable=false;
+            if(SoundOff_Button) SoundOff_Button.interactable=true;
             if (audioController) audioController.ToggleMute(false, "button");
             if (audioController) audioController.ToggleMute(false, "wl");
         }
@@ -415,7 +422,8 @@ public class UIManager : MonoBehaviour
         {
             //if (SoundOn_Object) SoundOn_Object.SetActive(false);
             //if (SoundOff_Object) SoundOff_Object.SetActive(true);
-            if (Sound_Button) Sound_Button.image.sprite = OffSprite;
+                   if (SoundON_Button) SoundON_Button.interactable=true;
+            if(SoundOff_Button) SoundOff_Button.interactable=false;
 
             if (audioController) audioController.ToggleMute(true, "button");
             if (audioController) audioController.ToggleMute(true, "wl");

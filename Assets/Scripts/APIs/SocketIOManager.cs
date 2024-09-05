@@ -1,12 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using System;
-using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
 using DG.Tweening;
-using System.Linq;
 using Newtonsoft.Json;
 using Best.SocketIO;
 using Best.SocketIO.Events;
@@ -35,16 +31,18 @@ public class SocketIOManager : MonoBehaviour
     //private string SocketURI;
 
     protected string SocketURI = null;
-    // protected string TestSocketURI = "https://dev.casinoparadize.com";
-    protected string TestSocketURI = "http://localhost:5000";
+    protected string TestSocketURI = "https://dev.casinoparadize.com";
+    // protected string TestSocketURI = "http://localhost:5000";
     [SerializeField] private string TestToken;
-    protected string gameID = ""; //SL-FISH
+
+    //COMPLETED: slot game id to be added and url to be changed
+    protected string gameID = "SL-FISH"; //SL-FISH 
     internal bool isLoading;
     internal bool SetInit = false;
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
-    //TODO: slot change template and awt
+    //COMPLETED: slot change template and awt
     private void Awake()
     {
         // Debug.unityLogger.logEnabled = false;
@@ -490,7 +488,7 @@ public class GameData
     public double jackpot { get; set; }
     public bool isBonus { get; set; }
     public double BonusStopIndex { get; set; }
-    public List<int> BonusResult { get; set; }
+    public List<double> BonusResult { get; set; }
 }
 
 [Serializable]

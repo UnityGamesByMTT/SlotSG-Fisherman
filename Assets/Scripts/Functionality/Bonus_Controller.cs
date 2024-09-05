@@ -11,7 +11,7 @@ public class Bonus_Controller : MonoBehaviour
     [SerializeField] private Button[] chest;
     [SerializeField] private ImageAnimation[] chestAnim;
     [SerializeField] private TMP_Text[] reward_text;
-    private List<int> resultData= new List<int>();
+    private List<double> resultData= new List<double>();
     [SerializeField] private GameObject bonusObject;
 
     public int openCount;
@@ -28,8 +28,9 @@ public class Bonus_Controller : MonoBehaviour
 
     [SerializeField] private List<string> Fakeresult=new List<string>();
 
-    //TODO: slot add audio
-    //TODO: add paylines
+    //COMPLETED: slot add audio
+
+    //COMPLETED: check bonus with socket and auto spin
     private void Start()
     {
         for (int i = 0; i < chest.Length; i++)
@@ -42,17 +43,16 @@ public class Bonus_Controller : MonoBehaviour
         // StartBonusGame(Fakeresult);
     }
 
-    internal void StartBonusGame(List<int> result)
+    internal void StartBonusGame(List<double> result)
     {
-
         for (int i = 0; i < result.Count; i++)
         {
             resultData.Add(result[i]);
         }
 
-        // audioController.StopBgAudio();
-        // audioController.StopWLAaudio();
-        // audioController.playBgAudio("bonus");
+        audioController.StopBgAudio();
+        audioController.StopWLAaudio();
+        audioController.playBgAudio("bonus");
 
         bonusObject.SetActive(true);
 
@@ -69,7 +69,7 @@ public class Bonus_Controller : MonoBehaviour
         bonusObject.SetActive(false);
         WinPopUp.SetActive(false);
 
-        // audioController.playBgAudio("normal");
+        audioController.playBgAudio("normal");
         foreach (Button item in chest)
         {
             item.interactable = true;
@@ -83,7 +83,7 @@ public class Bonus_Controller : MonoBehaviour
     {
         if (isfinished) return;
         if (opening) return;
-        // audioController.PlayButtonAudio();
+        audioController.PlayButtonAudio();
         StartCoroutine(chestOpenRoutine(index));
 
     }
@@ -96,13 +96,13 @@ public class Bonus_Controller : MonoBehaviour
         chest[index].interactable = false;
         bool gameFinishied = false;
         chestAnim[index].transform.DOShakePosition(1f, new Vector3(15, 0, 0), 30, 90, true);
-        yield return new WaitForSeconds(1);
-        // audioController.StopApinBonusAudio();
+        yield return new WaitForSeconds(1f);
         chestAnim[index].StartAnimation();
+        // audioController.StopApinBonusAudio();
 
         if (resultData[openCount] > 0)
         {
-            // audioController.PlayWLAudio("bonuswin");
+            audioController.PlayWLAudio("bonuswin");
             reward_text[index].text = "+ " + (resultData[openCount] * slotBehaviour.GetCurrentbetperLine()).ToString("f2");
             winAmount += (resultData[openCount] * slotBehaviour.GetCurrentbetperLine());
             // reward_text[index].text = "+ " + (resultData[openCount] * 1).ToString("f2");
@@ -110,7 +110,7 @@ public class Bonus_Controller : MonoBehaviour
         }
         else
         {
-            // audioController.PlayWLAudio("bonuslose");
+            audioController.PlayWLAudio("bonuslose");
             reward_text[index].text = "game Over";
             gameFinishied = true;
         }
@@ -119,20 +119,20 @@ public class Bonus_Controller : MonoBehaviour
         reward_text[index].gameObject.SetActive(true);
         reward_text[index].transform.DOScale(1, 0.8f);
         reward_text[index].transform.DOLocalMoveY(235, 0.8f);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         reward_text[index].gameObject.SetActive(false);
         reward_text[index].transform.localPosition = new Vector3(-50, -42);
         openCount++;
-        // audioController.StopWLAaudio();
+        audioController.StopWLAaudio();
 
         if (gameFinishied)
         {
 
-            WinPopUp.transform.localScale = Vector3.zero;
+            WinPopUp.transform.GetChild(0).localScale = Vector3.zero;
             WinPopUpText.text = winAmount.ToString();
             WinPopUp.SetActive(true);
-            WinPopUp.transform.DOScale(Vector3.one, 0.8f);
-            yield return new WaitForSeconds(1);
+            WinPopUp.transform.transform.GetChild(0).DOScale(Vector3.one, 0.8f);
+            yield return new WaitForSeconds(3f);
             isfinished = true;
 
         }
