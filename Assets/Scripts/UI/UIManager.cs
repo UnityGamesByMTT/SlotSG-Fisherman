@@ -301,7 +301,7 @@ public class UIManager : MonoBehaviour
             if (Menu_button) Menu_button.image.sprite = MenuCloseSprite;
             for (int i = 0; i < Menu_button_grp.childCount - 1; i++)
             {
-                Menu_button_grp.GetChild(i).DOLocalMoveY(130 * (i + 1), 0.1f * (i + 1));
+                Menu_button_grp.GetChild(i).DOLocalMoveY(-130 * (i + 1), 0.1f * (i + 1));
             }
         }
         else
