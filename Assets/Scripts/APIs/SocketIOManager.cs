@@ -31,7 +31,8 @@ public class SocketIOManager : MonoBehaviour
     //private string SocketURI;
 
     protected string SocketURI = null;
-    protected string TestSocketURI = "https://dev.casinoparadize.com";
+    protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
+    // protected string TestSocketURI = "https://dev.casinoparadize.com";
     // protected string TestSocketURI = "http://localhost:5000";
     [SerializeField] private string TestToken;
 
@@ -231,15 +232,16 @@ public class SocketIOManager : MonoBehaviour
 
     internal void CloseSocket()
     {
-        CloseSocketMesssage("EXIT");
-        DOVirtual.DelayedCall(0.1f, () =>
-        {
-            if (this.manager != null)
-            {
-                Debug.Log("Dispose my Socket");
-                this.manager.Close();
-            }
-        });
+        SendDataWithNamespace("EXIT");
+        // CloseSocketMesssage("EXIT");
+        // DOVirtual.DelayedCall(0.1f, () =>
+        // {
+        //     if (this.manager != null)
+        //     {
+        //         Debug.Log("Dispose my Socket");
+        //         this.manager.Close();
+        //     }
+        // });
     }
 
     private void CloseSocketMesssage(string eventName)
@@ -298,6 +300,16 @@ public class SocketIOManager : MonoBehaviour
                     resultData = myData.message.GameData;
                     playerdata = myData.message.PlayerData;
                     isResultdone = true;
+                    break;
+                }
+            case "ExitUser":
+                {
+                    if (this.manager != null)
+                    {
+                        Debug.Log("Dispose my Socket");
+                        this.manager.Close();
+                    }
+                    Application.ExternalCall("window.parent.postMessage", "onExit", "*");
                     break;
                 }
         }
