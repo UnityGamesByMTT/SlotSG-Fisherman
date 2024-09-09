@@ -103,8 +103,8 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (spalsh_screen) spalsh_screen.SetActive(true);
-        StartCoroutine(LoadingRoutine());
+        // if (spalsh_screen) spalsh_screen.SetActive(true);
+        // StartCoroutine(LoadingRoutine());
     }
 
     private void Start()
