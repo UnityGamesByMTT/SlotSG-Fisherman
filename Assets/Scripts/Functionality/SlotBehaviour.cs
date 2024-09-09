@@ -412,7 +412,6 @@ public class SlotBehaviour : MonoBehaviour
     //COMPLETED: slot compare balance
     private IEnumerator TweenRoutine()
     {
-        IsSpinning = true;
 
 
         if (currentBalance < currentTotalBet)
@@ -427,6 +426,7 @@ public class SlotBehaviour : MonoBehaviour
 
             yield break;
         }
+        IsSpinning = true;
         ToggleButtonGrp(false);
         if(audioController)audioController.PlaySpinBonusAudio();
 
@@ -490,9 +490,9 @@ public class SlotBehaviour : MonoBehaviour
         }
 
         if (audioController) audioController.StopApinBonusAudio();
+        if (audioController) audioController.StopWLAaudio();
         yield return new WaitForSeconds(0.5f);
 
-        // if (audioController) audioController.StopWLAaudio();
         //COMPLETED: slot chek result and payline and animation
 
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit);
@@ -688,6 +688,7 @@ public class SlotBehaviour : MonoBehaviour
         int tweenpos = (3 * IconSizeFactor) - IconSizeFactor;
         alltweens[index] = slotTransform.DOLocalMoveY(-tweenpos + 100, 0.5f).SetEase(Ease.OutElastic);
         yield return new WaitForSeconds(0.2f);
+
     }
 
 
