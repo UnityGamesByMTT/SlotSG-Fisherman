@@ -87,6 +87,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button CloseAD_Button;
     [SerializeField] private GameObject ADPopup_Object;
 
+    [SerializeField] private Button m_AwakeGameButton;
     private bool isExit = false;
 
 
@@ -105,8 +106,17 @@ public class UIManager : MonoBehaviour
     {
         // if (spalsh_screen) spalsh_screen.SetActive(true);
         // StartCoroutine(LoadingRoutine());
+
+        SimulateClickByDefault();
+
     }
 
+    private void SimulateClickByDefault()
+    {
+        Debug.Log("Awaken The Game...");
+        m_AwakeGameButton.onClick.AddListener(() => { Debug.Log("Called The Game..."); });
+        m_AwakeGameButton.onClick.Invoke();
+    }
     private void Start()
     {
 
