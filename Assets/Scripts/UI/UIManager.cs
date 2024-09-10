@@ -72,6 +72,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject QuitPopupObject;
     [SerializeField] private Button no_Button;
     [SerializeField] private Button yes_Button;
+    [SerializeField] private Button ExitCancel_Button;
     [SerializeField] private Button GameExit_Button;
 
     [Header("disconnection popup")]
@@ -86,6 +87,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button CloseAD_Button;
     [SerializeField] private GameObject ADPopup_Object;
 
+    [SerializeField] private Button m_AwakeGameButton;
     private bool isExit = false;
 
 
@@ -102,10 +104,19 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (spalsh_screen) spalsh_screen.SetActive(true);
-        StartCoroutine(LoadingRoutine());
+        // if (spalsh_screen) spalsh_screen.SetActive(true);
+        // StartCoroutine(LoadingRoutine());
+
+        SimulateClickByDefault();
+
     }
 
+    private void SimulateClickByDefault()
+    {
+        Debug.Log("Awaken The Game...");
+        m_AwakeGameButton.onClick.AddListener(() => { Debug.Log("Called The Game..."); });
+        m_AwakeGameButton.onClick.Invoke();
+    }
     private void Start()
     {
 
@@ -126,7 +137,10 @@ public class UIManager : MonoBehaviour
         if (GameExit_Button) GameExit_Button.onClick.AddListener(delegate { OpenPopup(QuitPopupObject); });
 
         if (no_Button) no_Button.onClick.RemoveAllListeners();
-        if (no_Button) no_Button.onClick.AddListener(delegate { ClosePopup(QuitPopupObject); });
+        if (no_Button) no_Button.onClick.AddListener(delegate { if(!isExit){ClosePopup(QuitPopupObject);}  });
+        
+        if (ExitCancel_Button) ExitCancel_Button.onClick.RemoveAllListeners();
+        if (ExitCancel_Button) ExitCancel_Button.onClick.AddListener(delegate { if(!isExit){ClosePopup(QuitPopupObject);}  });
 
         if (yes_Button) yes_Button.onClick.RemoveAllListeners();
         if (yes_Button) yes_Button.onClick.AddListener(CallOnExitFunction);
@@ -381,8 +395,9 @@ public class UIManager : MonoBehaviour
     private void CallOnExitFunction()
     {
         isExit = true;
+        audioController.PlayButtonAudio();
         slotManager.CallCloseSocket();
-        Application.ExternalCall("window.parent.postMessage", "onExit", "*");
+        // Application.ExternalCall("window.parent.postMessage", "onExit", "*");
     }
 
     private void ToggleMusic(bool isMusic)
@@ -422,7 +437,7 @@ public class UIManager : MonoBehaviour
         {
             //if (SoundOn_Object) SoundOn_Object.SetActive(false);
             //if (SoundOff_Object) SoundOff_Object.SetActive(true);
-                   if (SoundON_Button) SoundON_Button.interactable=true;
+            if (SoundON_Button) SoundON_Button.interactable=true;
             if(SoundOff_Button) SoundOff_Button.interactable=false;
 
             if (audioController) audioController.ToggleMute(true, "button");
