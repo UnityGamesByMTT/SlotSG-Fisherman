@@ -28137,8 +28137,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ' In this game, you''ll see five similar chest. Select one of them to reveal
-    your prize. '
+  m_text: In this game, you'll see five similar chest. Select them one by one to
+    reveal your prize until game is over.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d9b190a9454c24d95a59fb703e131a6c, type: 2}
   m_sharedMaterial: {fileID: -5180052559723246064, guid: d9b190a9454c24d95a59fb703e131a6c, type: 2}
