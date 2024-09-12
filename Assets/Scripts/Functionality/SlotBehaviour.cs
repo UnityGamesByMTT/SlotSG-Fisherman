@@ -154,8 +154,8 @@ public class SlotBehaviour : MonoBehaviour
 
             IsAutoSpin = true;
             if (AutoSpinStop_Button) AutoSpinStop_Button.gameObject.SetActive(true);
-            if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
-
+            // if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
+            ToggleButtonGrp(false);
             if (AutoSpinRoutine != null)
             {
                 StopCoroutine(AutoSpinRoutine);
@@ -190,15 +190,16 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator StopAutoSpinCoroutine()
     {
         yield return new WaitUntil(() => !IsSpinning);
-        ToggleButtonGrp(true);
         if (AutoSpinRoutine != null || tweenroutine != null)
         {
             StopCoroutine(AutoSpinRoutine);
             StopCoroutine(tweenroutine);
             tweenroutine = null;
             AutoSpinRoutine = null;
-            StopCoroutine(StopAutoSpinCoroutine());
+            yield return new WaitForSeconds(0.1f);
+            // StopCoroutine(StopAutoSpinCoroutine());
         }
+        ToggleButtonGrp(true);
     }
     internal void FetchLines(string LineVal, int count)
     {
@@ -347,7 +348,7 @@ public class SlotBehaviour : MonoBehaviour
     //COMPLETE: slot set ui properly at initial and multiparshhet
     internal void SetInitialUI()
     {
-        BetCounter = SocketManager.initialData.Bets.Count - 1;
+        BetCounter = 0;
         LineCounter = SocketManager.initialData.LinesCount.Count - 1;
         currentBalance = SocketManager.playerdata.Balance;
         currentTotalBet = SocketManager.initialData.Bets[BetCounter] * SocketManager.initialData.Lines.Count;
