@@ -147,15 +147,15 @@ public class SlotBehaviour : MonoBehaviour
 
     }
 
-        private void AutoSpin()
+    private void AutoSpin()
     {
-        if (!IsAutoSpin)
+        if (!IsAutoSpin && !IsSpinning)
         {
 
             IsAutoSpin = true;
+            ToggleButtonGrp(false);
             if (AutoSpinStop_Button) AutoSpinStop_Button.gameObject.SetActive(true);
             // if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
-            ToggleButtonGrp(false);
             if (AutoSpinRoutine != null)
             {
                 StopCoroutine(AutoSpinRoutine);
@@ -190,16 +190,17 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator StopAutoSpinCoroutine()
     {
         yield return new WaitUntil(() => !IsSpinning);
+
+        ToggleButtonGrp(true);
         if (AutoSpinRoutine != null || tweenroutine != null)
         {
             StopCoroutine(AutoSpinRoutine);
             StopCoroutine(tweenroutine);
             tweenroutine = null;
             AutoSpinRoutine = null;
-            yield return new WaitForSeconds(0.1f);
-            // StopCoroutine(StopAutoSpinCoroutine());
+            // yield return new WaitForSeconds(0.1f);
+            StopCoroutine(StopAutoSpinCoroutine());
         }
-        ToggleButtonGrp(true);
     }
     internal void FetchLines(string LineVal, int count)
     {
@@ -211,7 +212,9 @@ public class SlotBehaviour : MonoBehaviour
     internal void GenerateStaticLine(TMP_Text LineID_Text)
     {
 
-        int LineID = 0;
+
+        DestroyStaticLine();
+        int LineID = 1;
         try
         {
             LineID = int.Parse(LineID_Text.text);
@@ -222,7 +225,6 @@ public class SlotBehaviour : MonoBehaviour
         }
         List<int> y_points = null;
         y_points = y_string[LineID]?.Split(',')?.Select(Int32.Parse)?.ToList();
-        print("line id "+LineID);
         PayCalculator.GeneratePayoutLinesBackend(y_points, y_points.Count, true);
 
     }
@@ -231,7 +233,7 @@ public class SlotBehaviour : MonoBehaviour
     internal void DestroyStaticLine()
     {
 
-        PayCalculator.ResetLines();
+        PayCalculator.ResetStaticLine();
 
     }
 

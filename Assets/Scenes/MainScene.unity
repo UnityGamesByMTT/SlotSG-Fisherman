@@ -7264,7 +7264,7 @@ MonoBehaviour:
   uIManager: {fileID: 328934023}
   bonusdata: []
   _jsManager: {fileID: 500036493}
-  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI1NDQ3NjI0LCJleHAiOjE3MjYwNTI0MjR9.23Jo2ruWgAo4xYt-MAX9NYyGYcjzqQiCxj1_fFLCl8k
+  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI2MTk5ODYzLCJleHAiOjE3MjY4MDQ2NjN9.2-ACqFMNfHeCkMyfPu8CNegxIbouqMdhloZLlXuFyLw
 --- !u!114 &500036493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30686,7 +30686,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.050048828, y: -0.049987793}
+  m_AnchoredPosition: {x: -0.050048828, y: -0.050048828}
   m_SizeDelta: {x: 0.1, y: 0.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2117478477
