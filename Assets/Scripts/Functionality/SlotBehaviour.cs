@@ -190,16 +190,17 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator StopAutoSpinCoroutine()
     {
         yield return new WaitUntil(() => !IsSpinning);
+
+        ToggleButtonGrp(true);
         if (AutoSpinRoutine != null || tweenroutine != null)
         {
             StopCoroutine(AutoSpinRoutine);
             StopCoroutine(tweenroutine);
             tweenroutine = null;
             AutoSpinRoutine = null;
-            yield return new WaitForSeconds(0.1f);
-            // StopCoroutine(StopAutoSpinCoroutine());
+            // yield return new WaitForSeconds(0.1f);
+            StopCoroutine(StopAutoSpinCoroutine());
         }
-        ToggleButtonGrp(true);
     }
     internal void FetchLines(string LineVal, int count)
     {
