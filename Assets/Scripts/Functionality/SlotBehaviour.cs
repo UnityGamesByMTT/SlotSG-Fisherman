@@ -211,7 +211,9 @@ public class SlotBehaviour : MonoBehaviour
     internal void GenerateStaticLine(TMP_Text LineID_Text)
     {
 
-        int LineID = 0;
+
+        DestroyStaticLine();
+        int LineID = 1;
         try
         {
             LineID = int.Parse(LineID_Text.text);
@@ -222,7 +224,6 @@ public class SlotBehaviour : MonoBehaviour
         }
         List<int> y_points = null;
         y_points = y_string[LineID]?.Split(',')?.Select(Int32.Parse)?.ToList();
-        print("line id "+LineID);
         PayCalculator.GeneratePayoutLinesBackend(y_points, y_points.Count, true);
 
     }
@@ -231,7 +232,7 @@ public class SlotBehaviour : MonoBehaviour
     internal void DestroyStaticLine()
     {
 
-        PayCalculator.ResetLines();
+        PayCalculator.ResetStaticLine();
 
     }
 
