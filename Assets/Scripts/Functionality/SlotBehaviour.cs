@@ -147,15 +147,15 @@ public class SlotBehaviour : MonoBehaviour
 
     }
 
-        private void AutoSpin()
+    private void AutoSpin()
     {
-        if (!IsAutoSpin)
+        if (!IsAutoSpin && !IsSpinning)
         {
 
             IsAutoSpin = true;
+            ToggleButtonGrp(false);
             if (AutoSpinStop_Button) AutoSpinStop_Button.gameObject.SetActive(true);
             // if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
-            ToggleButtonGrp(false);
             if (AutoSpinRoutine != null)
             {
                 StopCoroutine(AutoSpinRoutine);
@@ -190,16 +190,17 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator StopAutoSpinCoroutine()
     {
         yield return new WaitUntil(() => !IsSpinning);
+
+        ToggleButtonGrp(true);
         if (AutoSpinRoutine != null || tweenroutine != null)
         {
             StopCoroutine(AutoSpinRoutine);
             StopCoroutine(tweenroutine);
             tweenroutine = null;
             AutoSpinRoutine = null;
-            yield return new WaitForSeconds(0.1f);
-            // StopCoroutine(StopAutoSpinCoroutine());
+            // yield return new WaitForSeconds(0.1f);
+            StopCoroutine(StopAutoSpinCoroutine());
         }
-        ToggleButtonGrp(true);
     }
     internal void FetchLines(string LineVal, int count)
     {
