@@ -35,9 +35,9 @@ public class SocketIOManager : MonoBehaviour
     //private string SocketURI;
 
     protected string SocketURI = null;
-    protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
+    // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
     // protected string TestSocketURI = "https://dev.casinoparadize.com";
-    // protected string TestSocketURI = "http://localhost:5000";
+    protected string TestSocketURI = "http://localhost:5000";
     [SerializeField] private string TestToken;
 
     //COMPLETED: slot game id to be added and url to be changed
@@ -337,10 +337,6 @@ public class SocketIOManager : MonoBehaviour
         //    slotManager.PopulateInitalSlots(i, points);
         // }
 
-        for (int i = 0; i < slotPop.Count; i++)
-        {
-            slotManager.LayoutReset(i);
-        }
 
         slotManager.SetInitialUI();
         isLoading = false;
