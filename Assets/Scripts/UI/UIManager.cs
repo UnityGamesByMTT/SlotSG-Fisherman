@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite MegaWin_Sprite;
     [SerializeField] private Sprite Jackpot_Sprite;
     [SerializeField] private TMP_Text Win_Text;
+    [SerializeField] private Button SkipWinAnimation;
 
 
     [Header("Menu popup")]
@@ -90,6 +91,8 @@ public class UIManager : MonoBehaviour
 
     private bool isMusic = true;
     private bool isSound = true;
+        private Tween WinPopupTextTween;
+    private Tween ClosePopupTween;
 
     //COMPLETED: slot add splash screen
 
@@ -174,6 +177,9 @@ public class UIManager : MonoBehaviour
         if (CloseAD_Button) CloseAD_Button.onClick.RemoveAllListeners();
         if (CloseAD_Button) CloseAD_Button.onClick.AddListener(CallOnExitFunction);
 
+                if(SkipWinAnimation) SkipWinAnimation.onClick.RemoveAllListeners();
+        if(SkipWinAnimation) SkipWinAnimation.onClick.AddListener(SkipWin);
+
         ToggleMusic(true);
         ToggleMusic(true);
 
@@ -228,14 +234,14 @@ public class UIManager : MonoBehaviour
         if (WinPopup_Object) WinPopup_Object.SetActive(true);
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
 
-        DOTween.To(() => initAmount, (val) => initAmount = val, (int)amount, 5f).OnUpdate(() =>
+        WinPopupTextTween=DOTween.To(() => initAmount, (val) => initAmount = val, (int)amount, 5f).OnUpdate(() =>
         {
 
             if (Win_Text) Win_Text.text = initAmount.ToString();
             
         });
 
-        DOVirtual.DelayedCall(6f, () =>
+        ClosePopupTween=DOVirtual.DelayedCall(6f, () =>
         {
 
             ClosePopup(WinPopup_Object);
@@ -302,6 +308,20 @@ public class UIManager : MonoBehaviour
         paytableList[CurrentIndex].SetActive(true);
     }
 
+        void SkipWin(){
+        Debug.Log("Skip win called");
+        if(ClosePopupTween!=null){
+            ClosePopupTween.Kill();
+            ClosePopupTween=null;
+        }
+        if(WinPopupTextTween!=null){
+            WinPopupTextTween.Kill();
+            WinPopupTextTween=null;
+        }
+        ClosePopup(WinPopup_Object);
+        slotManager.CheckPopups = false;
+    }
+
     void OnMenuClick()
     {
         isOpen = !isOpen;
@@ -340,15 +360,15 @@ public class UIManager : MonoBehaviour
             string text = null;
             if (paylines.symbols[i].Multiplier[0][0] != 0)
             {
-                text += $"5x- {paylines.symbols[i].Multiplier[0][0]}";
+                text += $"5x- {paylines.symbols[i].Multiplier[0][0]} X";
             } 
             if (paylines.symbols[i].Multiplier[1][0] != 0)
             {
-                text += $"\n3x- {paylines.symbols[i].Multiplier[1][0]}";
+                text += $"\n3x- {paylines.symbols[i].Multiplier[1][0]} X";
             }
             if (paylines.symbols[i].Multiplier[2][0] != 0)
             {
-                text += $"\n2x- {paylines.symbols[i].Multiplier[2][0]}";
+                text += $"\n2x- {paylines.symbols[i].Multiplier[2][0]} X";
             }
             if (SymbolsText[i]) SymbolsText[i].text = text;
         }
