@@ -225,10 +225,10 @@ public class SocketIOManager : MonoBehaviour
     private void AliveRequest()
     {
         InitData message = new InitData();
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
+        if (gameSocket != null && gameSocket.IsOpen)
         {
             // this.manager.Socket.Emit(eventName);
-            this.manager.Socket.Emit("YES I AM ALIVE");
+            gameSocket.Emit("YES I AM ALIVE");
 
             Debug.Log("JSON data sent: alive");
         }
@@ -269,9 +269,9 @@ public class SocketIOManager : MonoBehaviour
         //string json = JsonUtility.ToJson(message);
         //Debug.Log(json);
         // Send the message
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
+        if (gameSocket != null && gameSocket.IsOpen)
         {
-            this.manager.Socket.Emit(eventName);
+            gameSocket.Emit(eventName);
             //Debug.Log("JSON data sent: " + json);
         }
         else
@@ -379,16 +379,16 @@ public class SocketIOManager : MonoBehaviour
     private void SendDataWithNamespace(string eventName, string json = null)
     {
         // Send the message
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
+        if (gameSocket != null && gameSocket.IsOpen)
         {
             if (json != null)
             {
-                this.manager.Socket.Emit(eventName, json);
+                gameSocket.Emit(eventName, json);
                 Debug.Log("JSON data sent: " + json);
             }
             else
             {
-                this.manager.Socket.Emit(eventName);
+                gameSocket.Emit(eventName);
             }
         }
         else
