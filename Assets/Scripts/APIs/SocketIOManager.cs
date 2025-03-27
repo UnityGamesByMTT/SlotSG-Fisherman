@@ -44,8 +44,8 @@ public class SocketIOManager : MonoBehaviour
     protected string nameSpace = ""; //BackendChanges
     private Socket gameSocket; //BackendChanges
     //COMPLETED: slot game id to be added and url to be changed
-    //protected string gameID = "SL-FISH"; //SL-FISH
-    protected string gameID = "";
+    protected string gameID = "SL-FISH"; //SL-FISH
+    //protected string gameID = "";
     internal bool isLoading;
     internal bool SetInit = false;
     private const int maxReconnectionAttempts = 6;
